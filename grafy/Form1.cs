@@ -15,11 +15,14 @@ using System.Windows.Media;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Drawing;
+using System.Drawing.Printing;
 
 namespace grafy
 {
     public partial class Form1 : Form
     {
+
         public int checker = 1;
         private SeriesCollection series;
         public Form1()
@@ -51,6 +54,8 @@ namespace grafy
 
 
             }
+
+      
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
@@ -107,7 +112,7 @@ namespace grafy
                 {
                     case 1: series.Add(new ColumnSeries() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) }); break;
                     case 2: series.Add(new LineSeries() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) }); break;
-                   // case 3: series.Add(new PieChart() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) }); break; break;
+                    case 3: cartesianChart1.Visible = false; break;
                     default: MessageBox.Show("není vybrán graf"); break;
                 }
                 
@@ -132,6 +137,45 @@ namespace grafy
 
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // Create document
+            PrintDocument _document = new PrintDocument();
+            // Add print handler
+            _document.PrintPage += new PrintPageEventHandler(Document_PrintPage);
+            // Create the dialog to display results
+            PrintPreviewDialog _dlg = new PrintPreviewDialog();
+            _dlg.ClientSize = new System.Drawing.Size(Width / 2, Height / 2);
+            _dlg.Location = new System.Drawing.Point(Left, Top);
+            _dlg.MinimumSize = new System.Drawing.Size(375, 250);
+            _dlg.UseAntiAlias = true;
+            // Setting up our document
+            _dlg.Document = _document;
+            // Show it
+            _dlg.ShowDialog(this);
+            // Dispose document
+            _document.Dispose();
+
+        }
+        private void Document_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            // Create Bitmap according form size
+            Bitmap _bitmap = new Bitmap(cartesianChart1.Width, cartesianChart1.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            // Draw from into Bitmap DC
+            this.DrawToBitmap(_bitmap, this.DisplayRectangle);
+            // Draw Bitmap into Printer DC
+            e.Graphics.DrawImage(_bitmap, 0, 0);
+            // No longer deeded - dispose it
+            _bitmap.Dispose();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+            Bitmap bmp = new Bitmap(cartesianChart1.Width, cartesianChart1.Height);
+            cartesianChart1.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
+            bmp.Save("myfile.png", System.Drawing.Imaging.ImageFormat.Png);
+        }
     }
 
 }
