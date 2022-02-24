@@ -44,12 +44,6 @@ namespace grafy
             }) ;
             cartesianChart1.LegendLocation = LegendLocation.Right;
 
-
-
-            
-
-
-
             }
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -105,15 +99,33 @@ namespace grafy
                
                 switch (checker)
                 {
-                    case 1: series.Add(new ColumnSeries() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) }); break;
-                    case 2: series.Add(new LineSeries() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) }); break;
-                   // case 3: series.Add(new PieChart() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) }); break; break;
+                    case 1: 
+                        series.Add(new ColumnSeries() { 
+                            Title = year.Year.ToString(), 
+                            Values = new ChartValues<double>(values)
+                        });
+                        cartesianChart1.Series = series;
+                        break;
+                    case 2: 
+                        series.Add(new LineSeries() { 
+                            Title = year.Year.ToString(), 
+                            Values = new ChartValues<double>(values)
+                        });
+                        cartesianChart1.Series = series;
+                        break;
+                    case 3: 
+                        series.Add(new PieSeries { 
+                            Title = year.Year.ToString(), 
+                            Values = new ChartValues<double>(values),
+                            DataLabels = true,
+                        });
+                        pieChart1.Series = series;
+                        break;
                     default: MessageBox.Show("není vybrán graf"); break;
                 }
                 
                
             }
-            cartesianChart1.Series = series;
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -129,9 +141,16 @@ namespace grafy
             checker = 2;
             UpgradeGraph();
 
-
         }
 
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            checker = 3;
+            UpgradeGraph();
+
+            cartesianChart1.Visible = false;
+            pieChart1.Visible = true;
+        }
     }
 
 }
