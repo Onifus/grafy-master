@@ -21,6 +21,7 @@ namespace grafy
     public partial class Form1 : Form
     {
         public int checker = 1;
+        private SeriesCollection series;
         public Form1()
         {
             InitializeComponent();
@@ -59,12 +60,14 @@ namespace grafy
         private void datovybodBindingSource1_CurrentChanged(object sender, EventArgs e)
         {
             UpgradeGraph();
+        
         }
 
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             UpgradeGraph();
+          
         }
 
         private void InitData()
@@ -81,7 +84,7 @@ namespace grafy
             if (datovybodBindingSource.DataSource == null) return;
 
             cartesianChart1.Series.Clear();
-            SeriesCollection series = new SeriesCollection();
+            series = new SeriesCollection();
             var years = (from o in datovybodBindingSource.DataSource as List<Datovybod>
                          select new { Year = o.year }).Distinct();
             foreach (var year in years)
@@ -104,7 +107,7 @@ namespace grafy
                 {
                     case 1: series.Add(new ColumnSeries() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) }); break;
                     case 2: series.Add(new LineSeries() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) }); break;
-                    case 3: break;
+                   // case 3: series.Add(new PieChart() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) }); break; break;
                     default: MessageBox.Show("není vybrán graf"); break;
                 }
                 
@@ -116,12 +119,19 @@ namespace grafy
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             checker = 1;
+            UpgradeGraph();
+
+
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             checker = 2;
+            UpgradeGraph();
+
+
         }
+
     }
 
 }
