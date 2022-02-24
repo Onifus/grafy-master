@@ -20,6 +20,7 @@ namespace grafy
 {
     public partial class Form1 : Form
     {
+        public int checker = 1;
         public Form1()
         {
             InitializeComponent();
@@ -41,11 +42,18 @@ namespace grafy
                 LabelFormatter = value => value.ToString("C")
             }) ;
             cartesianChart1.LegendLocation = LegendLocation.Right;
-        }
+
+
+
+            
+
+
+
+            }
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void datovybodBindingSource1_CurrentChanged(object sender, EventArgs e)
@@ -69,6 +77,7 @@ namespace grafy
 
         private void UpgradeGraph()
         {
+          
             if (datovybodBindingSource.DataSource == null) return;
 
             cartesianChart1.Series.Clear();
@@ -90,11 +99,28 @@ namespace grafy
                         value = data.SingleOrDefault().value;
                         values.Add(value);
                 }
-                //series.Add(new LineSeries() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) });
-                series.Add(new ColumnSeries() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) });
+               
+                switch (checker)
+                {
+                    case 1: series.Add(new ColumnSeries() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) }); break;
+                    case 2: series.Add(new LineSeries() { Title = year.Year.ToString(), Values = new ChartValues<double>(values) }); break;
+                    case 3: break;
+                    default: MessageBox.Show("není vybrán graf"); break;
+                }
+                
                
             }
             cartesianChart1.Series = series;
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            checker = 1;
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            checker = 2;
         }
     }
 
