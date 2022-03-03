@@ -73,7 +73,7 @@ namespace grafy
             dataGridView1.Rows[0].Cells[2].Value = "15";
         }
 
-        private void UpdateGraph()
+        private void UpdateGraph    ()
         {
             if (datovybodBindingSource.DataSource == null) return;
 
@@ -191,10 +191,11 @@ namespace grafy
         //IMPORT CSV
         private void importButton_Click(object sender, EventArgs e)
         {
+            UpdateGraph();
             openFileDialog1.ShowDialog();
             dataGridView1.Text = openFileDialog1.FileName;
             BindData(dataGridView1.Text);
-            UpdateGraph();
+            
         }
         private void BindData(string pathToFile)
         {
