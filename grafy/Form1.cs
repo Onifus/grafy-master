@@ -132,7 +132,8 @@ namespace grafy
         {
             checker = 1;
             UpgradeGraph();
-
+            cartesianChart1.Visible = true;
+            pieChart1.Visible = false;
 
         }
 
@@ -140,6 +141,8 @@ namespace grafy
         {
             checker = 2;
             UpgradeGraph();
+            cartesianChart1.Visible = true;
+            pieChart1.Visible = false;
 
         }
 
@@ -147,7 +150,6 @@ namespace grafy
         {
             checker = 3;
             UpgradeGraph();
-
             cartesianChart1.Visible = false;
             pieChart1.Visible = true;
         }
