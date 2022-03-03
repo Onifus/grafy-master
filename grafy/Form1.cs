@@ -22,12 +22,15 @@ namespace grafy
 {
     public partial class Form1 : Form
     {
+       
 
         public int checker = 1;
         private SeriesCollection series;
+  
         public Form1()
         {
             InitializeComponent();
+
             //InitData();
 
         }
@@ -137,43 +140,37 @@ namespace grafy
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void printbutton(object sender, EventArgs e)
         {
-            // Create document
-            PrintDocument _document = new PrintDocument();
-            // Add print handler
-            _document.PrintPage += new PrintPageEventHandler(Document_PrintPage);
-            // Create the dialog to display results
-            PrintPreviewDialog _dlg = new PrintPreviewDialog();
-            _dlg.ClientSize = new System.Drawing.Size(Width / 2, Height / 2);
-            _dlg.Location = new System.Drawing.Point(Left, Top);
-            _dlg.MinimumSize = new System.Drawing.Size(375, 250);
-            _dlg.UseAntiAlias = true;
-            // Setting up our document
-            _dlg.Document = _document;
-            // Show it
-            _dlg.ShowDialog(this);
-            // Dispose document
-            _document.Dispose();
+
+            PrintDocument printDoc = new PrintDocument();
+            printDoc.DefaultPageSettings.Landscape = true;
+            printDoc.PrintPage += PrintDoc_PrintPage;
+            PrintPreviewDialog printPreviewDialog = new PrintPreviewDialog();
+            printPreviewDialog.Document = printDoc;
+
+            if (printPreviewDialog.ShowDialog() == DialogResult.OK)
+            {
+                printDoc.Print();
+            }
+
+
 
         }
-        private void Document_PrintPage(object sender, PrintPageEventArgs e)
+    
+
+        private void PrintDoc_PrintPage(object sender, PrintPageEventArgs e)
         {
-            // Create Bitmap according form size
-            Bitmap _bitmap = new Bitmap(cartesianChart1.Width, cartesianChart1.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-            // Draw from into Bitmap DC
-            this.DrawToBitmap(_bitmap, this.DisplayRectangle);
-            // Draw Bitmap into Printer DC
-            e.Graphics.DrawImage(_bitmap, 0, 0);
-            // No longer deeded - dispose it
-            _bitmap.Dispose();
+            Bitmap bitmap = new Bitmap(cartesianChart1.Width, cartesianChart1.Height);
+            cartesianChart1.DrawToBitmap(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
+            e.Graphics.DrawImage(bitmap, e.MarginBounds);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void savebutton(object sender, EventArgs e)
         {
 
             Bitmap bmp = new Bitmap(cartesianChart1.Width, cartesianChart1.Height);
-            cartesianChart1.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
+            cartesianChart1.DrawToBitmap(bmp, cartesianChart1.ClientRectangle);
             bmp.Save("myfile.png", System.Drawing.Imaging.ImageFormat.Png);
         }
     }
